@@ -15,34 +15,32 @@
 version: '3.8'
 
 services:  
-  \# \--- ส่วนของ Database (MySQL) \---  
+  \# ส่วนของการตั้งค่า MySQL  
   db:  
     image: mysql:8.0  
     container\_name: mysql\_container  
     restart: always  
     environment:  
-      MYSQL\_ROOT\_PASSWORD: rootpassword  \# รหัสผ่าน Root (แก้ได้)  
-      MYSQL\_DATABASE: my\_app\_db          \# สร้าง Database เริ่มต้น (แก้ได้)  
-      MYSQL\_USER: user                   \# สร้าง User ทั่วไป (แก้ได้)  
-      MYSQL\_PASSWORD: userpassword       \# รหัสผ่าน User (แก้ได้)  
+      MYSQL\_ROOT\_PASSWORD:  
+      MYSQL\_ALLOW\_EMPTY\_PASSWORD: ‘true’  
+      MYSQL\_DATABASE: test  
     ports:  
-      \- "3306:3306" \# ซ้าย: Port เครื่องเรา, ขวา: Port ใน Docker  
+      \- "3307:3306" \# เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง  
     volumes:  
-      \- ./db\_data:/var/lib/mysql \# บันทึกข้อมูลลงโฟลเดอร์ db\_data กันข้อมูลหาย  
-    command: \--default-authentication-plugin=mysql\_native\_password
+      \- ./db\_data:/var/lib/mysql
 
-  \# \--- ส่วนของหน้าเว็บจัดการ (phpMyAdmin) \---  
+  \# ส่วนของการตั้งค่า phpMyAdmin  
   phpmyadmin:  
     image: phpmyadmin/phpmyadmin  
     container\_name: pma\_container  
     restart: always  
     environment:  
-      PMA\_HOST: db            \# เชื่อมต่อกับ service ชื่อ 'db' ด้านบน  
-      UPLOAD\_LIMIT: 64M       \# เพิ่มขนาดไฟล์ Upload  
+      PMA\_HOST: db            \# บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)  
+      UPLOAD\_LIMIT: 200M       \# เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)  
     ports:  
-      \- "8080:80"             \# เข้าใช้งานผ่าน Browser ที่ Port 8080  
+      \- "8081:80"             \# เข้าใช้งานผ่าน browser ที่ port 8080  
     depends\_on:  
-      \- db
+      \- db                    \# รอให้ MySQL รันก่อนค่อยรันตัวนี้
 
 ### **คำสั่งใช้งาน (Command Line)**
 
@@ -104,11 +102,14 @@ services:
 
 ### **ตัวอย่าง: แม่ (ลูกค้า) \-\> ลูก (ใบสั่งซื้อ)**
 
-| Action | ความหมาย | เหมาะกับสถานการณ์ไหน? |
-| :---- | :---- | :---- |
+| **Action** | **ความหมาย** | **เหมาะกับสถานการณ์ไหน?** |
+
 | **RESTRICT** (Default) | **"ห้ามทำ"** ถ้าจะลบลูกค้าที่มีใบสั่งซื้อ ระบบจะ Error ไม่ยอมให้ลบ | **ข้อมูลสำคัญ:** เช่น ใบเสร็จ, ข้อมูลการเงิน ที่ห้ามหายเด็ดขาด |
+
 | **CASCADE** | **"ทำตามกัน"** ลบลูกค้า \-\> ใบสั่งซื้อหายหมด แก้รหัสลูกค้า \-\> รหัสในใบสั่งซื้อเปลี่ยนตาม | **ข้อมูลส่วนประกอบ:** เช่น ลบโพสต์แล้วคอมเมนต์หาย, หรือใช้กับการแก้ไข ID (Update) |
+
 | **SET NULL** | **"ปล่อยเกาะ"** ลบลูกค้า \-\> ใบสั่งซื้อยังอยู่ แต่ช่องรหัสลูกค้ากลายเป็นว่าง (NULL) | **ข้อมูลประวัติ:** ต้องการเก็บประวัติไว้ดู แม้เจ้าของข้อมูลจะไม่มีตัวตนแล้ว |
+
 | **NO ACTION** | ทำงานคล้าย RESTRICT ใน MySQL มาตรฐาน | ไม่ค่อยนิยมใช้ (ใช้ RESTRICT ชัดเจนกว่า) |
 
 ### **สูตรแนะนำ (Best Practice)**
