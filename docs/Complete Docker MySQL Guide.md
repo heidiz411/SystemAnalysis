@@ -17,32 +17,32 @@
 version: '3.8'
 
 services:  
-  \# ส่วนของการตั้งค่า MySQL  
+  # ส่วนของการตั้งค่า MySQL  
   db:  
     image: mysql:8.0  
-    container\_name: mysql\_container  
+    container_name: mysql_container  
     restart: always  
     environment:  
-      MYSQL\_ROOT\_PASSWORD:  
-      MYSQL\_ALLOW\_EMPTY\_PASSWORD: 'true'  
-      MYSQL\_DATABASE: test  
+      MYSQL_ROOT_PASSWORD:  
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'  
+      MYSQL_DATABASE: test  
     ports:  
-      \- "3307:3306" \# เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง  
+      - "3307:3306" # เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง  
     volumes:  
-      \- ./db\_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
 
-  \# ส่วนของการตั้งค่า phpMyAdmin  
+  # ส่วนของการตั้งค่า phpMyAdmin  
   phpmyadmin:  
     image: phpmyadmin/phpmyadmin  
-    container\_name: pma\_container  
+    container_name: pma_container  
     restart: always  
     environment:  
-      PMA\_HOST: db            \# บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)  
-      UPLOAD\_LIMIT: 200M       \# เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)  
+      PMA_HOST: db            # บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)  
+      UPLOAD_LIMIT: 200M       # เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)  
     ports:  
-      \- "8081:80"             \# เข้าใช้งานผ่าน browser ที่ port 8080  
-    depends\_on:  
-      \- db                    \# รอให้ MySQL รันก่อนค่อยรันตัวนี้  
+      - "8081:80"             # เข้าใช้งานผ่าน browser ที่ port 8080  
+    depends_on:  
+      - db                    # รอให้ MySQL รันก่อนค่อยรันตัวนี้  
 ```
 
 ### **คำสั่งใช้งาน (Command Line)**
