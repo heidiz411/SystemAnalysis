@@ -14,35 +14,35 @@
 
 version: '3.8'
 
-services:  
-  \# \--- ส่วนของ Database (MySQL) \---  
-  db:  
-    image: mysql:8.0  
-    container\_name: mysql\_container  
-    restart: always  
-    environment:  
-      MYSQL\_ROOT\_PASSWORD: rootpassword  \# รหัสผ่าน Root (แก้ได้)  
-      MYSQL\_DATABASE: my\_app\_db          \# สร้าง Database เริ่มต้น (แก้ได้)  
-      MYSQL\_USER: user                   \# สร้าง User ทั่วไป (แก้ได้)  
-      MYSQL\_PASSWORD: userpassword       \# รหัสผ่าน User (แก้ได้)  
-    ports:  
-      \- "3306:3306" \# ซ้าย: Port เครื่องเรา, ขวา: Port ใน Docker  
-    volumes:  
-      \- ./db\_data:/var/lib/mysql \# บันทึกข้อมูลลงโฟลเดอร์ db\_data กันข้อมูลหาย  
-    command: \--default-authentication-plugin=mysql\_native\_password
+services:
+  # ส่วนของการตั้งค่า MySQL
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306" # เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง
+    volumes:
+      - ./db_data:/var/lib/mysql # สำคัญ: บันทึกข้อมูลลงในโฟลเดอร์ db_data เพื่อกันข้อมูลหายตอนปิด Docker
+    # บรรทัดด้านล่างช่วยแก้ปัญหาเรื่อง Authentication ของ MySQL รุ่นใหม่ๆ ให้เข้ากับ Client เก่าๆ ได้ง่ายขึ้น
+    command: --default-authentication-plugin=mysql_native_password
 
-  \# \--- ส่วนของหน้าเว็บจัดการ (phpMyAdmin) \---  
-  phpmyadmin:  
-    image: phpmyadmin/phpmyadmin  
-    container\_name: pma\_container  
-    restart: always  
-    environment:  
-      PMA\_HOST: db            \# เชื่อมต่อกับ service ชื่อ 'db' ด้านบน  
-      UPLOAD\_LIMIT: 64M       \# เพิ่มขนาดไฟล์ Upload  
-    ports:  
-      \- "8080:80"             \# เข้าใช้งานผ่าน Browser ที่ Port 8080  
-    depends\_on:  
-      \- db
+  # ส่วนของการตั้งค่า phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma_container
+    restart: always
+    environment:
+      PMA_HOST: db            # บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)
+      UPLOAD_LIMIT: 64M       # เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)
+    ports:
+      - "8081:80"             # เข้าใช้งานผ่าน browser ที่ port 8080
+    depends_on:
+      - db                    # รอให้ MySQL รันก่อนค่อยรันตัวนี้
 
 ### **คำสั่งใช้งาน (Command Line)**
 
