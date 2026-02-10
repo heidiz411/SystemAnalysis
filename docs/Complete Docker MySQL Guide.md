@@ -19,20 +19,20 @@ version: '3.8'
 services:  
   # ส่วนของการตั้งค่า MySQL  
   db:  
-    image: mysql:8.0  
-    container_name: mysql_container  
-    restart: always  
-    environment:  
-      MYSQL_ROOT_PASSWORD:  
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'  
-      MYSQL_DATABASE: test  
-    ports:  
-      - "3307:3306" # เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง  
-    volumes:  
+    image: mysql:latest
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: test
+    ports:
+      - "3307:3306" # เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง
+    volumes:
       - ./db_data:/var/lib/mysql
 
-  # ส่วนของการตั้งค่า phpMyAdmin  
-  phpmyadmin:  
+  # ส่วนของการตั้งค่า phpMyAdmin
+  phpmyadmin:
     image: phpmyadmin/phpmyadmin  
     container_name: pma_container  
     restart: always  
