@@ -10,37 +10,37 @@
 
 1. สร้างโฟลเดอร์ใหม่ในเครื่องคอมพิวเตอร์ (เช่น mysql-server)  
 2. สร้างไฟล์ชื่อ docker-compose.yml ในโฟลเดอร์นั้น  
-3. คัดลอกโค้ดด้านล่างไปใส่:  
-* version: '3.8'  
-*   
-* services:  
-*   \# ส่วนของการตั้งค่า MySQL  
-*   db:  
-*     image: mysql:8.0  
-*     container\_name: mysql\_container  
-*     restart: always  
-*     environment:  
-*       MYSQL\_ROOT\_PASSWORD:  
-*       MYSQL\_ALLOW\_EMPTY\_PASSWORD: 'true'  
-*       MYSQL\_DATABASE: test  
-*     ports:  
-*       \- "3307:3306" \# เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง  
-*     volumes:  
-*       \- ./db\_data:/var/lib/mysql  
-*   
-*   \# ส่วนของการตั้งค่า phpMyAdmin  
-*   phpmyadmin:  
-*     image: phpmyadmin/phpmyadmin  
-*     container\_name: pma\_container  
-*     restart: always  
-*     environment:  
-*       PMA\_HOST: db            \# บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)  
-*       UPLOAD\_LIMIT: 200M       \# เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)  
-*     ports:  
-*       \- "8081:80"             \# เข้าใช้งานผ่าน browser ที่ port 8080  
-*     depends\_on:  
-*       \- db                    \# รอให้ MySQL รันก่อนค่อยรันตัวนี้  
-* 
+3. คัดลอกโค้ดด้านล่างไปใส่:
+
+version: '3.8'
+
+services:  
+  \# ส่วนของการตั้งค่า MySQL  
+  db:  
+    image: mysql:8.0  
+    container\_name: mysql\_container  
+    restart: always  
+    environment:  
+      MYSQL\_ROOT\_PASSWORD:  
+      MYSQL\_ALLOW\_EMPTY\_PASSWORD: 'true'  
+      MYSQL\_DATABASE: test  
+    ports:  
+      \- "3307:3306" \# เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง  
+    volumes:  
+      \- ./db\_data:/var/lib/mysql
+
+  \# ส่วนของการตั้งค่า phpMyAdmin  
+  phpmyadmin:  
+    image: phpmyadmin/phpmyadmin  
+    container\_name: pma\_container  
+    restart: always  
+    environment:  
+      PMA\_HOST: db            \# บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)  
+      UPLOAD\_LIMIT: 200M       \# เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)  
+    ports:  
+      \- "8081:80"             \# เข้าใช้งานผ่าน browser ที่ port 8080  
+    depends\_on:  
+      \- db                    \# รอให้ MySQL รันก่อนค่อยรันตัวนี้
 
 ### **คำสั่งใช้งาน (Command Line)**
 
@@ -118,4 +118,3 @@
 
 * **ON DELETE:** เลือก **RESTRICT** (เพื่อป้องกันอุบัติเหตุข้อมูลหาย)  
 * **ON UPDATE:** เลือก **CASCADE** (เพื่อให้แก้ ID ได้ แล้วข้อมูลไหลตามกันไปไม่พัง)
-
