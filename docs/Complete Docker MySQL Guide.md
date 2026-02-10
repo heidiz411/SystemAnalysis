@@ -12,6 +12,7 @@
 2. สร้างไฟล์ชื่อ docker-compose.yml ในโฟลเดอร์นั้น  
 3. คัดลอกโค้ดด้านล่างไปใส่:
 
+##yml##
 version: '3.8'
 
 services:
@@ -43,7 +44,7 @@ services:
       - "8081:80"             # เข้าใช้งานผ่าน browser ที่ port 8080
     depends_on:
       - db                    # รอให้ MySQL รันก่อนค่อยรันตัวนี้
-
+##/yml##
 ### **คำสั่งใช้งาน (Command Line)**
 
 เปิด Command Prompt หรือ PowerShell ในโฟลเดอร์นั้น แล้วใช้คำสั่ง:
