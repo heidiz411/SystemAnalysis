@@ -12,8 +12,10 @@
 2. สร้างไฟล์ชื่อ docker-compose.yml ในโฟลเดอร์นั้น  
 3. คัดลอกโค้ดด้านล่างไปใส่:
 
+##yml##
 version: '3.8'
 
+<<<<<<< HEAD
 services:  
   \# ส่วนของการตั้งค่า MySQL  
   db:  
@@ -41,7 +43,38 @@ services:
       \- "8081:80"             \# เข้าใช้งานผ่าน browser ที่ port 8080  
     depends\_on:  
       \- db                    \# รอให้ MySQL รันก่อนค่อยรันตัวนี้
+=======
+services:
+  # ส่วนของการตั้งค่า MySQL
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306" # เปิดพอร์ตให้เครื่อง Windows เข้าถึง MySQL ได้โดยตรง
+    volumes:
+      - ./db_data:/var/lib/mysql # สำคัญ: บันทึกข้อมูลลงในโฟลเดอร์ db_data เพื่อกันข้อมูลหายตอนปิด Docker
+    # บรรทัดด้านล่างช่วยแก้ปัญหาเรื่อง Authentication ของ MySQL รุ่นใหม่ๆ ให้เข้ากับ Client เก่าๆ ได้ง่ายขึ้น
+    command: --default-authentication-plugin=mysql_native_password
+>>>>>>> 4d3f8e49b0c25e8bfccb0d97ed654e865dba1cca
 
+  # ส่วนของการตั้งค่า phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma_container
+    restart: always
+    environment:
+      PMA_HOST: db            # บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)
+      UPLOAD_LIMIT: 64M       # เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)
+    ports:
+      - "8081:80"             # เข้าใช้งานผ่าน browser ที่ port 8080
+    depends_on:
+      - db                    # รอให้ MySQL รันก่อนค่อยรันตัวนี้
+##/yml##
 ### **คำสั่งใช้งาน (Command Line)**
 
 เปิด Command Prompt หรือ PowerShell ในโฟลเดอร์นั้น แล้วใช้คำสั่ง:
