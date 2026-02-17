@@ -33,14 +33,17 @@ services:
 
   # ส่วนของการตั้งค่า phpMyAdmin
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin  
+    image: phpmyadmin:latest  
     container_name: pma_container  
     restart: always  
     environment:  
-      PMA_HOST: db            # บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)  
-      UPLOAD_LIMIT: 200M       # เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ)  
+      PMA_HOST: db            # บอกให้รู้ว่า MySQL ชื่อ service ว่า 'db' (ตรงกับด้านบน)
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: 
+      UPLOAD_LIMIT: 200M       # เพิ่มขนาดไฟล์ upload (เผื่อ import database ใหญ่ๆ) 
     ports:  
-      - "8081:80"             # เข้าใช้งานผ่าน browser ที่ port 8080  
+      - "8001:80"             # เข้าใช้งานผ่าน browser ที่ port 8001  
     depends_on:  
       - db                    # รอให้ MySQL รันก่อนค่อยรันตัวนี้  
 ```
@@ -54,7 +57,7 @@ services:
 * **ดูสถานะ:** docker-compose ps  
 * **ดู Log:** docker logs mysql\_container
 
-**การเข้าใช้งาน:** เปิด Browser ไปที่ http://localhost:8080
+**การเข้าใช้งาน:** เปิด Browser ไปที่ http://localhost:8001
 
 ## **2\. การแก้ปัญหา MySQL ติดๆ ดับๆ (Restart Loop Troubleshooting)**
 
